@@ -1,0 +1,29 @@
+units           real
+atom_style      full
+bond_style      harmonic
+angle_style     cosine/squared 
+dihedral_style  none
+improper_style  none
+pair_style      hybrid/overlay lj/gromacs 9 12 coul/long 12
+special_bonds   lj 0 1 1 coul 0 0 1	# coul 0 0 1 only valid as long as no other 
+					# molecules than water have two 1-2 charged neighbors
+neigh_modify    every 10 delay 0 check no
+
+# semi-infinite domain (slab)
+boundary        p p f
+
+# electrostatics settings
+dielectric      2.5
+kspace_style    pppm 1.0e-5
+kspace_modify	slab 3.0
+
+# NEMD run variables
+variable	vel      	equal 0.1 # m/s
+variable	Nshear	 	equal 40000000
+variable	Nthermo	equal 100
+variable  	Nrestart 	equal 100000
+variable 	Ntraj   	equal 100000
+variable      	Nav      	equal 10000
+variable	NeveryV  	equal 10
+variable 	NrepeatV 	equal 1000
+variable	NfreqV   	equal 10000

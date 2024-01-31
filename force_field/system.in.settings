@@ -1,0 +1,353 @@
+# Atom types:
+# 1 - Q0: Q0 (guar)
+# 2 - P1: P1 (guar)
+# 3 - GL1: P1 (guar)
+# 4 - GL2: SP2 (guar)
+# 5 - GL3: P4 (guar)
+# 6 - M1, M4: P1 (guar)
+# 7 - M2, M5: SP2 (guar)
+# 8 - M3, M6: P4 (guar)
+# 9 - Qa: Qa (SDS)
+# 10 - C1: C1 (SDS)
+# 11 - EO: EO (unused)
+# 12 - W: W (water) 
+# 13 - WPM: WPM (water)
+# 14 - Qd: Qd (chloride)
+# 15 - C1: C1 (hair)
+# 16 - C5: C5 (hair)
+# 17 - P5: P5 (hair)
+# 18 - C1: C1 (hair graphene)
+# 19 - C1: ghost bead (hair, no LJ)
+# 20 - C1: C1 (hair)
+# 21 - Qa: Qa (hair)
+# 22 - C1: C1 (hair graphene)
+# 23 - C1: ghost bead (hair, no LJ)
+
+# pre-defined groups
+group guar		type 1 2 3 4 5 6 7 8
+group fattyAcid 	type 15 16 17 20 21
+group sds		type 9 10
+group water		type 12 13
+group waterC		type 12
+group chloride 	type 14
+group bulk		type < 15
+group 18mea     	type 15 16 17 20 21
+group botGraphene 	type 18 19
+group topGraphene 	type 22 23
+group CghostGrapheneTop type 23
+group CghostGraphene 	type 19
+group CgrapheneTop 	type 22
+group Cgraphene 	type 18
+group thermoFA 	type 17 
+
+# derived groups
+group           mobile subtract all Cgraphene CghostGraphene CgrapheneTop CghostGrapheneTop
+group		topGraphene union CgrapheneTop CghostGrapheneTop
+group		botGraphene union Cgraphene CghostGraphene
+
+# pair-wise nonbonded interactions
+pair_coeff * *    coul/long
+
+#####################################################
+# CGG self-interaction LJ ###########################
+#####################################################
+
+# Q0-XX LJ interactions
+pair_coeff 1 1 lj/gromacs  0.8361 4.7	# Q0-Q0: IV
+pair_coeff 1 2 lj/gromacs  1.0750 4.7	# Q0-P1: II
+pair_coeff 1 3 lj/gromacs  1.0750 4.7	# Q0-P1: II
+pair_coeff 1 4 lj/gromacs  1.1945 4.7	# Q0-SP2: I
+pair_coeff 1 5 lj/gromacs  1.3378 4.7	# Q0-P4: O
+pair_coeff 1 6 lj/gromacs  1.0750 4.7	# Q0-P1: II
+pair_coeff 1 7 lj/gromacs  1.1945 4.7	# Q0-SP2: I
+pair_coeff 1 8 lj/gromacs  1.3378 4.7	# Q0-P4: O
+
+# P1-XX LJ interactions
+pair_coeff 2 2 lj/gromacs  1.0750 4.7	# P1-P1: II
+pair_coeff 2 3 lj/gromacs  1.0750 4.7	# P1-P1: II
+pair_coeff 2 4 lj/gromacs  1.0750 4.7	# P1-SP2: II
+pair_coeff 2 5 lj/gromacs  1.0750 4.7	# P1-P4: II
+pair_coeff 2 6 lj/gromacs  1.0750 4.7	# P1-P1: II
+pair_coeff 2 7 lj/gromacs  1.0750 4.7	# P1-SP2: II
+pair_coeff 2 8 lj/gromacs  1.0750 4.7	# P1-P4: II
+
+# GL1-XX LJ interactions
+pair_coeff 3 3 lj/gromacs  1.0750 4.7	# P1-P1: II
+pair_coeff 3 4 lj/gromacs  1.0750 4.7	# P1-SP2: II
+pair_coeff 3 5 lj/gromacs  1.0750 4.7	# P1-P4: II
+pair_coeff 3 6 lj/gromacs  1.0750 4.7	# P1-P1: II
+pair_coeff 3 7 lj/gromacs  1.0750 4.7	# P1-SP2: II
+pair_coeff 3 8 lj/gromacs  1.0750 4.7	# P1-P4: II
+
+# GL2-XX LJ interactions
+pair_coeff 4 4 lj/gromacs  0.8063 4.3	# SP2-SP2: II
+pair_coeff 4 5 lj/gromacs  1.0750 4.7	# SP2-P4: II
+pair_coeff 4 6 lj/gromacs  1.0750 4.7	# SP2-P1: II
+pair_coeff 4 7 lj/gromacs  0.8063 4.3	# SP2-SP2: II
+pair_coeff 4 8 lj/gromacs  1.0750 4.7	# SP2-P4: II
+
+# GL3-XX LJ interactions
+pair_coeff 5 5 lj/gromacs  1.1945 4.7	# P4-P4: I
+pair_coeff 5 6 lj/gromacs  1.0750 4.7	# P4-P1: II
+pair_coeff 5 7 lj/gromacs  1.0750 4.7	# P4-SP2: II
+pair_coeff 5 8 lj/gromacs  1.1945 4.7	# P4-P4: I
+
+# M1-XX LJ interactions
+pair_coeff 6 6 lj/gromacs  1.0750 4.7	# P1-P1: II
+pair_coeff 6 7 lj/gromacs  1.0750 4.7	# P1-SP2: II
+pair_coeff 6 8 lj/gromacs  1.0750 4.7	# P1-P4: II
+
+# M2-XX LJ interactions
+pair_coeff 7 7 lj/gromacs  0.8063 4.3	# SP2-SP2: II
+pair_coeff 7 8 lj/gromacs  1.0750 4.7	# SP2-P4: II
+
+# M3-M3 LJ interactions
+pair_coeff 8 8 lj/gromacs  1.1945 4.7	# P4-P4: I
+
+#####################################################
+# SDS LJ interactions ###############################
+#####################################################
+
+# SDS (Qa) LJ interactions
+pair_coeff 1 9 lj/gromacs 0.5497 4.7	# Qa-Q0: VII
+pair_coeff 2 9 lj/gromacs 1.3378 4.7	# Qa-P1: O
+pair_coeff 3 9 lj/gromacs 1.3378 4.7	# Qa-P1: O
+pair_coeff 4 9 lj/gromacs 1.3378 4.7	# Qa-SP2: O
+pair_coeff 5 9 lj/gromacs 1.3378 4.7	# Qa-P4: O
+pair_coeff 6 9 lj/gromacs 1.3378 4.7	# Qa-P1: O
+pair_coeff 7 9 lj/gromacs 1.3378 4.7	# Qa-SP2: O
+pair_coeff 8 9 lj/gromacs 1.3378 4.7	# Qa-P4: O
+pair_coeff 9 9 lj/gromacs 0.8361 4.7	# Qa-Qa: IV
+
+# SDS (C1) LJ interactions
+pair_coeff 1 10 lj/gromacs 0.5497 4.7	# C1-Q0: VII
+pair_coeff 2 10 lj/gromacs 0.6450 4.7	# C1-P1: VI
+pair_coeff 3 10 lj/gromacs 0.6450 4.7	# C1-P1: VI
+pair_coeff 4 10 lj/gromacs 0.5497 4.7	# C1-SP2: VII
+pair_coeff 5 10 lj/gromacs 0.4778 4.7	# C1-P4: VIII
+pair_coeff 6 10 lj/gromacs 0.6450 4.7	# C1-P1: VI
+pair_coeff 7 10 lj/gromacs 0.5497 4.7	# C1-SP2: VII
+pair_coeff 8 10 lj/gromacs 0.4778 4.7	# C1-P4: VIII
+pair_coeff 9 10 lj/gromacs 0.5497 4.7	# C1-Qa: VII
+pair_coeff 10 10 lj/gromacs 0.8361 4.7 # C1-C1: IV
+
+# SLES (EO) LJ interactions (unused)
+pair_coeff 11 *  lj/gromacs 0 0
+
+#####################################################
+# POLWATER LJ interactions ##########################
+#####################################################
+
+# Central water bead (W) LJ interactions (Yesylevskyy)
+pair_coeff 1 12 lj/gromacs 1.0750 4.7	# W-Q0: II
+pair_coeff 2 12 lj/gromacs 1.0213 4.7	# W-P1: 0.95*II
+pair_coeff 3 12 lj/gromacs 1.0213 4.7	# W-P1: 0.95*II
+pair_coeff 4 12 lj/gromacs 1.0213 4.7	# W-SP2: 0.95*II
+pair_coeff 5 12 lj/gromacs 1.1347 4.7	# W-P4: 0.95*I
+pair_coeff 6 12 lj/gromacs 1.0213 4.7	# W-P1: 0.95*II
+pair_coeff 7 12 lj/gromacs 1.0213 4.7	# W-SP2: 0.95*II
+pair_coeff 8 12 lj/gromacs 1.1347 4.7	# W-P4: 0.95*I
+pair_coeff 9 12 lj/gromacs 1.1945 4.7	# W-Qa: I
+pair_coeff 10 12 lj/gromacs 0.4539 4.7 # W-C1: 0.95*VIII
+pair_coeff 11 12 lj/gromacs 0.7943 4.7 # W-EO: (*0.95)
+pair_coeff 12 12 lj/gromacs 0.9556 4.7 # W-W
+
+#####################################################
+# CI LJ interactions ################################
+#####################################################
+
+# Chloride ions (Qd)
+pair_coeff 1 14 lj/gromacs 0.5497 4.7	# Qd-Q0: VII
+pair_coeff 2 14 lj/gromacs 1.3378 4.7	# Qd-P1: O
+pair_coeff 3 14 lj/gromacs 1.3378 4.7	# Qd-P1: O
+pair_coeff 4 14 lj/gromacs 1.3378 4.7	# Qd-SP2: O
+pair_coeff 5 14 lj/gromacs 1.3378 4.7	# Qd-P4: O
+pair_coeff 6 14 lj/gromacs 1.3378 4.7	# Qd-P1: O
+pair_coeff 7 14 lj/gromacs 1.3378 4.7	# Qd-SP2: O
+pair_coeff 8 14 lj/gromacs 1.3378 4.7	# Qd-P4: O
+pair_coeff 9 14 lj/gromacs 0.9556 4.7	# Qd-Qa: III
+pair_coeff 10 14 lj/gromacs 0.5497 4.7 # Qd-C1: VII
+pair_coeff 11 14 lj/gromacs 0.8361 4.7 # Qd-EO
+pair_coeff 12 14 lj/gromacs 1.1945 4.7 # Qd-W: I
+pair_coeff 14 14 lj/gromacs 0.8361 4.7 # Qd-Qd: IV
+
+#####################################################
+# F-layer LJ interactions ###########################
+#####################################################
+
+# 18-MEA (C1) LJ interactions
+pair_coeff 1 15 lj/gromacs 0.5497 4.7 # C1-Q0: VII
+pair_coeff 2 15 lj/gromacs 0.6450 4.7 # C1-P1: VI
+pair_coeff 3 15 lj/gromacs 0.6450 4.7 # C1-P1: VI
+pair_coeff 4 15 lj/gromacs 0.5497 4.7 # C1-SP2: VII
+pair_coeff 5 15 lj/gromacs 0.4778 4.7 # C1-P4: VIII
+pair_coeff 6 15 lj/gromacs 0.6450 4.7 # C1-P1: VI
+pair_coeff 7 15 lj/gromacs 0.5497 4.7 # C1-SP2: VII
+pair_coeff 8 15 lj/gromacs 0.4778 4.7 # C1-P4: VIII
+pair_coeff 9 15 lj/gromacs 0.5497 4.7 # C1-Qa: VII
+pair_coeff 10 15 lj/gromacs 0.8361 4.7 # C1-C1: IV
+pair_coeff 11 15 lj/gromacs 0.6044 4.7 # EO-C1
+pair_coeff 12 15 lj/gromacs 0.4539 4.7 # W-C1: 0.95*VIII
+pair_coeff 14 15 lj/gromacs 0.5497 4.7 # Qd-C1: VII
+pair_coeff 15 15 lj/gromacs 0.8361 4.7 # C1-C1: IV
+
+# 18-MEA (C5) LJ interactions
+pair_coeff 1 16 lj/gromacs 0.8361 4.7	# C5-Q0: IV
+pair_coeff 2 16 lj/gromacs 0.8361 4.7	# C5-P1: IV
+pair_coeff 3 16 lj/gromacs 0.8361 4.7	# C5-P1: IV
+pair_coeff 4 16 lj/gromacs 0.8361 4.7	# C5-SP2: IV
+pair_coeff 5 16 lj/gromacs 0.7406 4.7	# C5-P4: V
+pair_coeff 6 16 lj/gromacs 0.8361 4.7	# C5-P1: IV
+pair_coeff 7 16 lj/gromacs 0.8361 4.7	# C5-SP2: IV
+pair_coeff 8 16 lj/gromacs 0.7406 4.7	# C5-P4: V
+pair_coeff 9 16 lj/gromacs 0.8361 4.7	# C5-Qa: IV
+pair_coeff 10 16 lj/gromacs 0.7406 4.7 # C5-C1: V
+pair_coeff 11 16 lj/gromacs 0.7047 4.7 # EO-C5
+pair_coeff 12 16 lj/gromacs 0.7035 4.7 # W-C5: 0.95*V
+pair_coeff 14 16 lj/gromacs 0.8361 4.7 # Qd-C5: IV
+pair_coeff 15 16 lj/gromacs 0.7406 4.7 # C1-C5: V
+pair_coeff 16 16 lj/gromacs 0.8361 4.7 # C5-C5: IV
+
+# 18-MEA (P5) LJ interactions
+pair_coeff 1 17 lj/gromacs 1.3378 4.7	# P5-Q0: O
+pair_coeff 2 17 lj/gromacs 1.3378 4.7	# P5-P1: O
+pair_coeff 3 17 lj/gromacs 1.3378 4.7	# P5-P1: O
+pair_coeff 4 17 lj/gromacs 1.3378 4.7	# P5-SP2: O
+pair_coeff 5 17 lj/gromacs 1.3378 4.7	# P5-P4: O
+pair_coeff 6 17 lj/gromacs 1.3378 4.7	# P5-P1: O
+pair_coeff 7 17 lj/gromacs 1.3378 4.7	# P5-SP2: O
+pair_coeff 8 17 lj/gromacs 1.3378 4.7	# P5-P4: O
+pair_coeff 9 17 lj/gromacs 1.3378 4.7	# P5-Qa: O
+pair_coeff 10 17 lj/gromacs 0.4778 4.7 # P5-C1: VIII
+pair_coeff 11 17 lj/gromacs 0.8361 4.7 # EO-P5
+pair_coeff 12 17 lj/gromacs 1.2707 4.7 # W-P5: 0.95*O
+pair_coeff 14 17 lj/gromacs 1.3378 4.7 # Qd-P5: O
+pair_coeff 15 17 lj/gromacs 0.4778 4.7 # C1-P5: VIII
+pair_coeff 16 17 lj/gromacs 0.7406 4.7 # C5-P5: V
+pair_coeff 17 17 lj/gromacs 1.3378 4.7 # P5-P5: O
+
+# Graphene LJ interactions
+pair_coeff 1 18 lj/gromacs 0.5497 4.7	# C1-Q0: VII
+pair_coeff 2 18 lj/gromacs 0.6450 4.7	# C1-P1: VI
+pair_coeff 3 18 lj/gromacs 0.6450 4.7	# C1-P1: VI
+pair_coeff 4 18 lj/gromacs 0.5497 4.7	# C1-SP2: VII
+pair_coeff 5 18 lj/gromacs 0.4778 4.7	# C1-P4: VIII
+pair_coeff 6 18 lj/gromacs 0.6450 4.7	# C1-P1: VI
+pair_coeff 7 18 lj/gromacs 0.5497 4.7	# C1-SP2: VII
+pair_coeff 8 18 lj/gromacs 0.4778 4.7	# C1-P4: VIII
+pair_coeff 9 18 lj/gromacs 0.5497 4.7	# C1-Qa: VII
+pair_coeff 10 18 lj/gromacs 0.8361 4.7 # C1-C1: IV
+pair_coeff 11 18 lj/gromacs 0.6043 4.7 # EO-C1
+pair_coeff 12 18 lj/gromacs 0.4539 4.7 # W-C1: 0.95*VIII
+pair_coeff 14 18 lj/gromacs 0.5497 4.7 # Qd-C1: VII
+pair_coeff 15 18 lj/gromacs 0.8361 4.7 # C1-C1: IV
+pair_coeff 16 18 lj/gromacs 0.7406 4.7 # C5-C1: V
+pair_coeff 17 18 lj/gromacs 0.4778 4.7 # P5-C1: VIII
+pair_coeff 18 18 lj/gromacs 0.8361 4.7 # C1-C1: IV
+
+# 18-MEA terminal bead (C1) LJ interactions
+pair_coeff 1 20 lj/gromacs 0.5497 4.7	# C1-Q0: VII
+pair_coeff 2 20 lj/gromacs 0.6450 4.7	# C1-P1: VI
+pair_coeff 3 20 lj/gromacs 0.6450 4.7	# C1-P1: VI
+pair_coeff 4 20 lj/gromacs 0.5497 4.7	# C1-SP2: VII
+pair_coeff 5 20 lj/gromacs 0.4778 4.7	# C1-P4: VIII
+pair_coeff 6 20 lj/gromacs 0.6450 4.7	# C1-P1: VI
+pair_coeff 7 20 lj/gromacs 0.5497 4.7	# C1-SP2: VII
+pair_coeff 8 20 lj/gromacs 0.4778 4.7	# C1-P4: VIII
+pair_coeff 9 20 lj/gromacs 0.5497 4.7	# C1-Qa: VII
+pair_coeff 10 20 lj/gromacs 0.8361 4.7 # C1-C1: IV
+pair_coeff 11 20 lj/gromacs 0.6044 4.7 # EO-C1
+pair_coeff 12 20 lj/gromacs 0.4539 4.7 # W-C1: 0.95*VIII
+pair_coeff 14 20 lj/gromacs 0.5497 4.7 # Qd-C1: VII
+pair_coeff 15 20 lj/gromacs 0.8361 4.7 # C1-C1: IV
+pair_coeff 16 20 lj/gromacs 0.7406 4.7 # C5-C1: V
+pair_coeff 17 20 lj/gromacs 0.4778 4.7 # P5-C1: VIII
+pair_coeff 18 20 lj/gromacs 0.8361 4.7 # C1-C1: IV
+pair_coeff 20 20 lj/gromacs 0.8361 4.7 # C1-C1: IV
+
+# Cysteic acid (Qa) LJ interactions
+pair_coeff 1 21 lj/gromacs 0.5497 4.7	# Qa-Q0: VII
+pair_coeff 2 21 lj/gromacs 1.3378 4.7	# Qa-P1: O
+pair_coeff 3 21 lj/gromacs 1.3378 4.7	# Qa-P1: O
+pair_coeff 4 21 lj/gromacs 1.3378 4.7	# Qa-SP2: O
+pair_coeff 5 21 lj/gromacs 1.3378 4.7	# Qa-P4: O
+pair_coeff 6 21 lj/gromacs 1.3378 4.7	# Qa-P1: O
+pair_coeff 7 21 lj/gromacs 1.3378 4.7	# Qa-SP2: O
+pair_coeff 8 21 lj/gromacs 1.3378 4.7	# Qa-P4: O
+pair_coeff 9 21 lj/gromacs 0.8361 4.7	# Qa-Qa: IV
+pair_coeff 10 21 lj/gromacs 0.5497 4.7 # C1-Qa: VII
+pair_coeff 11 21 lj/gromacs 0.5497 4.7 # C1-Qa: VII
+pair_coeff 12 21 lj/gromacs 1.1945 4.7 # W-Qa: I
+pair_coeff 14 21 lj/gromacs 0.9556 4.7 # Qd-Qa: III
+pair_coeff 15 21 lj/gromacs 0.5497 4.7 # C1-Qa: VII
+pair_coeff 16 21 lj/gromacs 0.8361 4.7 # C5-Qa: IV
+pair_coeff 17 21 lj/gromacs 1.3378 4.7 # P5-Qa: O
+pair_coeff 18 21 lj/gromacs 0.5497 4.7 # C1-Qa: VII
+pair_coeff 20 21 lj/gromacs 0.5497 4.7 # C1-Qa: VII
+pair_coeff 21 21 lj/gromacs 0.8361 4.7 # Qa-Qa: IV
+
+# Graphene LJ interactions
+pair_coeff 1 22 lj/gromacs 0.5497 4.7	# C1-Q0: VII
+pair_coeff 2 22 lj/gromacs 0.6450 4.7	# C1-P1: VI
+pair_coeff 3 22 lj/gromacs 0.6450 4.7	# C1-P1: VI
+pair_coeff 4 22 lj/gromacs 0.5497 4.7	# C1-SP2: VII
+pair_coeff 5 22 lj/gromacs 0.4778 4.7	# C1-P4: VIII
+pair_coeff 6 22 lj/gromacs 0.6450 4.7	# C1-P1: VI
+pair_coeff 7 22 lj/gromacs 0.5497 4.7	# C1-SP2: VII
+pair_coeff 8 22 lj/gromacs 0.4778 4.7	# C1-P4: VIII
+pair_coeff 9 22 lj/gromacs 0.5497 4.7	# C1-Qa: VII
+pair_coeff 10 22 lj/gromacs 0.8361 4.7 # C1-C1: IV
+pair_coeff 11 22 lj/gromacs 0.6044 4.7 # EO-C1
+pair_coeff 12 22 lj/gromacs 0.4539 4.7 # W-C1: 0.95*VIII
+pair_coeff 14 22 lj/gromacs 0.5497 4.7 # Qd-C1: VII
+pair_coeff 15 22 lj/gromacs 0.8361 4.7 # C1-C1: IV
+pair_coeff 16 22 lj/gromacs 0.7406 4.7 # C5-C1: V
+pair_coeff 17 22 lj/gromacs 0.4778 4.7 # P5-C1: VIII
+pair_coeff 18 22 lj/gromacs 0.8361 4.7 # C1-C1: IV
+pair_coeff 20 22 lj/gromacs 0.8361 4.7 # C1-C1: IV
+pair_coeff 21 22 lj/gromacs 0.5497 4.7 # C1-Qa: VII
+
+
+#####################################################
+# Bond potentials ###################################
+#####################################################
+
+bond_coeff	1	75.1767497491639	3.4153	#Q0-P1
+bond_coeff	2	27.1534477544195	3.9	#P1-GL1
+bond_coeff	3	11.7036726946966	2.4115	#GL1-GL2
+bond_coeff	4	15.0728811753464	2.4116	#GL2-GL3
+bond_coeff	5	15.655138079312	5.1983	#GL2-M4
+bond_coeff	6	87.7801524128046	2.2156	#M4-M5
+bond_coeff	7	69.1913022814143	2.092	#M5-M6
+bond_coeff	8	63.5264086478739	5.6605	#M2-M5 (Backbone: inter-monomer)
+bond_coeff	9	79.2773101051123	2.4107	#M1-M2
+bond_coeff	10	27.1989342212136	2.3016	#M2-M3
+bond_coeff	11	50.2741145365504	4.5439	#M5-M2 (Backbone: monomer-monomer)
+bond_coeff	12	100000   		1.4	# water
+bond_coeff	13	1.4937858508604        4.7	# SDS
+
+
+#####################################################
+# Angle potentials ##################################
+#####################################################
+
+angle_coeff	1	21.6932465360726	108.15587	#Q0-P1-GL1
+angle_coeff	2	558.162474916388	162.186	#P1-GL1-GL2
+angle_coeff	3	62.5294481605351	141.16784	#GL1-GL2-GL3
+angle_coeff	4	46.2185654562829	75.4858	#M4-GL2-GL1
+angle_coeff	5	78.6057441471572	66.89768	#M4-GL2-GL3
+angle_coeff	6	86.5652532250358	122.12132	#M5-M4-GL2
+angle_coeff	7	832.057105828954	161.41805	#M4-M5-M6
+angle_coeff	8	90.1565432393693	99.45869	#M2-M5-M4
+angle_coeff	9	156.467809364549	96.38273	#M2-M5-M6
+angle_coeff	10	243.278614429049	74.0175	#M1-M2-M5
+angle_coeff	11	379.468109173435	57.9932	#M3-M2-M5
+angle_coeff	12	127.562649307215	126.12416	#M1-M2-M3
+angle_coeff	13	235.587857142857	89.496965	#M4-M5-M2
+angle_coeff	14	189.16005255614	67.207785	#M6-M5-M2
+angle_coeff	15	194.082078953655	88.940385	#M5-M2-M1
+angle_coeff	16	174.630081223125	122.826565	#M5-M2-M3
+angle_coeff	17	14.5939348781653	153.89798	# backbone
+angle_coeff	18	29.5112955327281	162.475	# backbone
+angle_coeff	19	0.5019126  		0		# water
+angle_coeff	20	2.9875717017208        180		# SDS
