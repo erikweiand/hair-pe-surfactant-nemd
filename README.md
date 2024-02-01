@@ -11,5 +11,7 @@ erik.weiand19@imperial.ac.uk
 
 This repository contains relevant files for producing coarse-grained non-equilibrium molecular dynamics simulations (CG-NEMD) for contacts between two hair surfaces in the presence of cationic guar gum and anionic surfactants.
 
+An example for each CG-MD step in the process (adsorption, squeeze-out, NEMD) is given in the `cgmd` folder. The force-field files should be copied into the respective directories unless already present (in the case of squeeze-out simulations).
+
 ## References
 [1] E. Weiand, P. H. Koenig, F. Rodriguez-Ropero, Y. Roiter, S. Angioletti-Uberti, D. Dini, J.P. Ewen, Boundary lubrication performance of polyelectrolyte-surfactant complexes on biomimetic surfacess, chemRxiv preprint (2023), [**https://doi.org/10.26434/chemrxiv-2023-9c6fz**](https://doi.org/10.26434/chemrxiv-2023-9c6fz).
