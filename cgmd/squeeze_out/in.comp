@@ -1,0 +1,73 @@
+include      	"system.in.init"
+read_data   	"contact_with_bath_eq.data"	# comment for restarting
+#read_restart	"restart.*.comp"		# uncomment for restarting
+include       	"system.in.settings"
+
+# custom mobile group for squeezing
+group           mobile subtract all CghostGraphene CghostGrapheneTop Cgraphene
+
+# dump trajectory
+dump            1 all custom ${Ntraj} traj_nvt.lammpstrj id mol type x y z ix iy iz
+
+# fix polarizable molecule bonds
+fix 		1 water shake 0.0001 20 1000 b 12
+
+# exclude ghost graphene interactions
+neigh_modify 	exclude type 18 19
+neigh_modify 	exclude type 18 18
+neigh_modify 	exclude type 19 19
+neigh_modify 	exclude type 22 23
+neigh_modify 	exclude type 22 22
+neigh_modify 	exclude type 23 23
+
+# setting top graphene layer velocity to zero (comment for restarting)
+velocity 	topGraphene zero angular
+velocity 	topGraphene zero linear
+run 0
+
+# thermostatting the first bead in the lipid chain (bond to ghost graphene)
+fix fxlng 	thermoFA langevin 298.15 298.15 100.0 699483 zero yes
+
+#1GPa = 0.14393 kcal mol-1 A-3, 1atm = 0.0000145837 kcal mol-1 A-3, kcal mol-1 A-3 x A2 = kcal mol-1 A-1
+variable     	applied_press equal 100 # pressure in atm
+variable     	Sz       equal 119.112*103.154*4                         
+print       	"Surface Area = ${Sz} A^2"
+variable     	applied_force equal (${applied_press}*0.0000145837*${Sz})                       #in kcal mol-1 A-1 (/2 if applied to both surfaces)
+print       	"Applied Force = ${applied_force} kcal mol^-1 A^-1" 
+variable     	z_force_top   equal (-${applied_force})/(count(CgrapheneTop))
+print    	"z_force_top = ${z_force_top} kcal mol-1 A-1"
+fix 		fxTop CgrapheneTop setforce 0 0 NULL
+fix 		forceTop CgrapheneTop aveforce NULL NULL v_z_force_top
+
+# keep top substrate graphene rigid while compressing
+fix 		fxlan1 CghostGrapheneTop rigid single force * off off on torque * off off off #langevin 0.0 0.0 1000000.0 24526
+fix 		fxTopCouple CgrapheneTop spring couple CghostGrapheneTop 1000000 NULL NULL 0.0 0.0
+
+# lower surface
+velocity 	CghostGraphene set 0 0 0
+velocity 	Cgraphene set 0 0 0
+fix 		freeze1 CghostGraphene setforce 0.0 0.0 0.0
+fix 		freeze2 Cgraphene setforce 0.0 0.0 0.0
+
+# output contact thickness
+compute 	topCOM 	CgrapheneTop com
+compute 	botCOM 	Cgraphene com
+variable 	thickness equal c_topCOM[3]-c_botCOM[3] 
+fix           	thickness_ave all ave/time 1 10000 10000 v_thickness file thickness_ave
+
+# integrate the equations of motion
+fix 		fxnve mobile nve
+
+# compute temperature and pressure of mobile beads
+compute 	tempMobile mobile temp
+compute 	pressMobile all pressure tempMobile
+
+thermo_style  	custom step c_tempMobile pe etotal press density epair v_thickness
+thermo        	${Nthermo}
+restart	${Nrestart} restart.*.slide
+
+timestep      	5.0
+run		20000000 upto
+
+# write output data file
+write_data  	system_after_comp.data

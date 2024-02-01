@@ -1,0 +1,19 @@
+include       	"system.in.init"
+read_data     	"hair_with_PES.data"
+include       	"system.in.settings"
+
+# reflecting walls in z
+fix 		zwalls all wall/lj93 zhi 297 1.0 1.0 4.7 units box
+
+# exclude ghost graphene bead interactions
+neigh_modify 	exclude type 18 19
+
+# freeze graphene
+fix 		freezeC Cgraphene setforce 0.0 0.0 0.0
+
+# minimize mobile beads
+thermo 	1
+minimize 	0 1e-8 10000 10000
+
+# write output data file
+write_data  	system_after_min.data

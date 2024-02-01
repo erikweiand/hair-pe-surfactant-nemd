@@ -1,0 +1,31 @@
+include         "system.in.init"
+read_data       "hair_with_guar.data"
+include         "system.in.settings"
+
+# reflecting walls in z
+fix 		zwalls all wall/harmonic zhi 107 1.0 1.0 4.7 units box
+
+# exclude ghost graphene bead interactions
+neigh_modify 	exclude type 18 19
+
+# freeze graphene and water beads
+fix 		freezeC Cgraphene setforce 0.0 0.0 0.0
+fix 		freezeFA 18mea setforce 0.0 0.0 0.0
+
+# minimize liquid
+thermo 	1
+minimize 	0 1e-8 10000 10000
+
+# minimize lipids
+unfix 		freezeFA
+fix 		freezeWater water setforce 0.0 0.0 0.0
+fix 		freezeIons ions setforce 0.0 0.0 0.0
+minimize 	0 1e-8 10000 10000
+
+# minimize all mobile beads
+unfix 		freezeWater
+unfix 		freezeIons
+minimize 	0 1e-8 10000 10000
+
+# write output data file
+write_data  	system_after_min.data

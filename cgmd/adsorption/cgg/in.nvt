@@ -1,0 +1,41 @@
+include       	"system.in.init"
+read_data     	"system_after_min.data"	# comment for restarting
+#read_restart	"restart.*.nvt"		# uncomment for restarting
+include       	"system.in.settings"
+
+# dump trajectory
+dump            1 all custom ${Ntraj} traj_nvt.lammpstrj id mol type x y z ix iy iz
+
+# reflecting walls in z
+fix 		zwalls all wall/harmonic zhi 107 1.0 1.0 4.7 units box
+
+# fix polarizable molecule bonds
+fix 		1 water shake 0.0001 20 1000 b 12
+
+# exclude ghost graphene interactions
+neigh_modify 	exclude type 18 19
+
+# freeze bottom substrate graphene completely
+velocity 	Cgraphene set 0 0 0
+fix 		freeze1 Cgraphene setforce 0.0 0.0 0.0
+
+# integrate the equations of motion
+fix		fxnvt mobile nvt temp 300.0 300.0 1000.0 
+
+# compute temperature and pressure of mobile beads
+compute 	tempMobile mobile temp
+compute 	pressMobile all pressure tempMobile
+
+thermo_style  	custom step c_tempMobile pe etotal c_pressMobile vol epair
+thermo        	${Nthermo}
+restart	${Nrestart} restart.*.nvt
+
+# short small-t equilibration (comment for restarting)
+timestep 	0.1
+run		20000
+
+timestep      	5.0
+run		30000000 upto
+
+# write output data file
+write_data  	system_after_nvt.data
